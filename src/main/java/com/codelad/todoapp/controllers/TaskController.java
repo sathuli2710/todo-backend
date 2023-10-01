@@ -31,11 +31,8 @@ public class TaskController {
     public ResponseEntity<GenericResponseDTO<?>> getAllTasks(){
         try{
             List<TaskDTO> allTasks = taskService.getAllTasks();
-            if(!allTasks.isEmpty()){
-                TaskResponse taskResponse = new TaskResponse(allTasks.size(), allTasks);
-                return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", taskResponse, null), HttpStatus.OK);
-            }
-            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "SUCCESS", new ArrayList<>(), null), HttpStatus.NOT_FOUND);
+            TaskResponse taskResponse = new TaskResponse(allTasks.size(), allTasks);
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", taskResponse, null), HttpStatus.OK);
         }catch(Exception e) {
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Cannot get all the Tasks"), HttpStatus.BAD_REQUEST);
         }
@@ -48,7 +45,7 @@ public class TaskController {
             if(Objects.nonNull(targetTask)){
                 return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", targetTask, null), HttpStatus.OK);
             }
-            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "SUCCESS", new ArrayList<>(), "No Such Task"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "ERROR", new ArrayList<>(), "No Such Task"), HttpStatus.NOT_FOUND);
         }catch(Exception e){
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Cannot get the Task"), HttpStatus.BAD_REQUEST);
         }
@@ -83,7 +80,7 @@ public class TaskController {
                 taskService.updateTask(existingTaskDto, updateTaskDto);
                 return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", "Successfully Updated the Task", null), HttpStatus.OK);
             }
-            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "SUCCESS", "No Such Task", null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "ERROR", "No Such Task", null), HttpStatus.NOT_FOUND);
         }catch (Exception e){
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Cannot update the task"), HttpStatus.BAD_REQUEST);
         }
@@ -97,7 +94,7 @@ public class TaskController {
                 taskService.deleteById(taskId);
                 return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", "Successfully Deleted the Task", null), HttpStatus.OK);
             }
-            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "SUCCESS", "No Such Task", null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "ERROR", "No Such Task", null), HttpStatus.NOT_FOUND);
         }catch (Exception e){
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Cannot delete the task"), HttpStatus.BAD_REQUEST);
         }

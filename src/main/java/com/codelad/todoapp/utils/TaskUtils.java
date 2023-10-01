@@ -12,29 +12,6 @@ import java.util.Date;
 
 @Component
 public class TaskUtils {
-
-//    private static final Logger logger = LoggerFactory.getLogger(TaskUtils.class);
-    public Timestamp ConvertStringtoTimestamp(String stringDateTime){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try{
-            Date parsedDateTime = dateFormat.parse(stringDateTime);
-            return new Timestamp(parsedDateTime.getTime());
-        }
-        catch(ParseException ignored){
-            return null;
-        }
-    }
-
-    public Timestamp ConvertUnixTimeStamptoTimestamp(String unixTimestamp){
-        try{
-            long unixLongTimeStamp = Long.parseLong(unixTimestamp);
-            return new Timestamp(unixLongTimeStamp * 1000L);
-        }
-        catch(NumberFormatException ignored){
-            return null;
-        }
-    }
-
     public TaskDTO convertTaskEntityToTaskDTO(TaskEntity taskEntity){
         TaskDTO taskDto = new TaskDTO();
         taskDto.setId(taskEntity.getId());
