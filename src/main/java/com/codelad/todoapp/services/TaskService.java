@@ -32,7 +32,7 @@ public class TaskService {
     public List<TaskDTO> getAllTasks(){
         try{
             List<TaskEntity> allTaskEntities = taskRepository.findAll();
-            List<TaskDTO> allTaskDtos = new ArrayList<TaskDTO>();
+            List<TaskDTO> allTaskDtos = new ArrayList<>();
             for(TaskEntity taskEntity : allTaskEntities){
                 TaskDTO taskDto = taskUtils.convertTaskEntityToTaskDTO(taskEntity);
                 allTaskDtos.add(taskDto);
@@ -53,5 +53,30 @@ public class TaskService {
         }catch(Exception ignored){
             return null;
         }
+    }
+
+    public void updateTask(TaskDTO existingTaskDto, TaskDTO updateTaskDto){
+        try{
+            Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+            updateTaskDto.setId(existingTaskDto.getId());
+            updateTaskDto.setTitle(updateTaskDto.getTitle() == null ? existingTaskDto.getTitle() : updateTaskDto.getTitle());
+            updateTaskDto.setSubTitle(updateTaskDto.getSubTitle() == null ? existingTaskDto.getSubTitle() : updateTaskDto.getSubTitle());
+            updateTaskDto.setContent(updateTaskDto.getContent() == null ? existingTaskDto.getContent() : updateTaskDto.getContent());
+            updateTaskDto.setStatus(updateTaskDto.getStatus() == null ? existingTaskDto.getStatus() : updateTaskDto.getStatus());
+            updateTaskDto.setDueDateTime(updateTaskDto.getDueDateTime() == null ? existingTaskDto.getDueDateTime() : updateTaskDto.getDueDateTime());
+            updateTaskDto.setCreationDateTime(existingTaskDto.getCreationDateTime());
+            updateTaskDto.setCreator(existingTaskDto.getCreator());
+            updateTaskDto.setUpdatedDatetime(currentTimestamp);
+            updateTaskDto.setUpdater(updateTaskDto.getUpdater());
+            taskRepository.save(taskUtils.convertTaskDTOtoTaskEntity(updateTaskDto));
+        }
+        catch(Exception ignored){
+        }
+    }
+
+    public void deleteById(String taskId){
+        try{
+            taskRepository.deleteById(Long.parseLong(taskId));
+        }catch(Exception ignored){}
     }
 }

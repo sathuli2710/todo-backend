@@ -1,15 +1,17 @@
 package com.codelad.todoapp.controllers;
 
+import com.codelad.todoapp.dtos.CreationValidator;
 import com.codelad.todoapp.dtos.GenericResponseDTO;
 import com.codelad.todoapp.dtos.TaskDTO;
+import com.codelad.todoapp.dtos.UpdationValidator;
 import com.codelad.todoapp.services.TaskService;
 import com.codelad.todoapp.utils.StringToTimestampConvertor;
-import jakarta.validation.Valid;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
@@ -24,7 +26,7 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
-    public record TaskResponse(int numFound, List<TaskDTO> data){};
+    public record TaskResponse(int numFound, List<TaskDTO> data){}
     @GetMapping("/")
     public ResponseEntity<GenericResponseDTO<?>> getAllTasks(){
         try{
@@ -58,7 +60,7 @@ public class TaskController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<GenericResponseDTO<?>> createTask(@Valid @ModelAttribute TaskDTO taskDto, BindingResult bindingResult){
+    public ResponseEntity<GenericResponseDTO<?>> createTask(@Validated(CreationValidator.class) @ModelAttribute TaskDTO taskDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), bindingResult.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
         }
@@ -67,6 +69,37 @@ public class TaskController {
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.CREATED.value(), "SUCCESS", "Successfully Created the Task", null), HttpStatus.CREATED);
         }catch(Exception ignored) {
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Cannot create the task"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{taskId}")
+    public ResponseEntity<GenericResponseDTO<?>> updateTask(@NonNull @PathVariable String taskId, @Validated(UpdationValidator.class) @ModelAttribute TaskDTO updateTaskDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), bindingResult.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
+        }
+        try{
+            TaskDTO existingTaskDto = taskService.getTaskById(taskId);
+            if(Objects.nonNull(existingTaskDto)) {
+                taskService.updateTask(existingTaskDto, updateTaskDto);
+                return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", "Successfully Updated the Task", null), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "SUCCESS", "No Such Task", null), HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Cannot update the task"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<GenericResponseDTO<?>> deleteById(@NonNull @PathVariable String taskId){
+        try{
+            TaskDTO existingTaskDto = taskService.getTaskById(taskId);
+            if(Objects.nonNull(existingTaskDto)) {
+                taskService.deleteById(taskId);
+                return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", "Successfully Deleted the Task", null), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "SUCCESS", "No Such Task", null), HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Cannot delete the task"), HttpStatus.BAD_REQUEST);
         }
     }
 
