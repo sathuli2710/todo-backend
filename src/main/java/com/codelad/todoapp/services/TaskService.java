@@ -22,6 +22,7 @@ public class TaskService {
         try{
             Timestamp currentTimestamp = new Timestamp(new Date().getTime());
             TaskEntity taskEntity = taskUtils.convertTaskDTOtoTaskEntity(taskDto);
+            taskEntity.setUpdater(taskDto.getCreator());
             taskEntity.setCreationDateTime(currentTimestamp);
             taskEntity.setUpdatedDatetime(currentTimestamp);
             taskRepository.save(taskEntity);
