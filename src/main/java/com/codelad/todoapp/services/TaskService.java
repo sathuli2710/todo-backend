@@ -63,7 +63,7 @@ public class TaskService {
             updateTaskDto.setTitle(updateTaskDto.getTitle() == null ? existingTaskDto.getTitle() : updateTaskDto.getTitle());
             updateTaskDto.setSubTitle(updateTaskDto.getSubTitle() == null ? existingTaskDto.getSubTitle() : updateTaskDto.getSubTitle());
             updateTaskDto.setContent(updateTaskDto.getContent() == null ? existingTaskDto.getContent() : updateTaskDto.getContent());
-            updateTaskDto.setStatus(updateTaskDto.getStatus() == null ? existingTaskDto.getStatus() : updateTaskDto.getStatus());
+            updateTaskDto.setStatusId(updateTaskDto.getStatusId() == null ? existingTaskDto.getStatusId() : updateTaskDto.getStatusId());
             updateTaskDto.setDueDateTime(updateTaskDto.getDueDateTime() == null ? existingTaskDto.getDueDateTime() : updateTaskDto.getDueDateTime());
             updateTaskDto.setCreationDateTime(existingTaskDto.getCreationDateTime());
             updateTaskDto.setCreator(existingTaskDto.getCreator());

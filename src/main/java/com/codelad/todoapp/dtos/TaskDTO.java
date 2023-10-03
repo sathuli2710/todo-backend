@@ -2,6 +2,7 @@ package com.codelad.todoapp.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -16,7 +17,9 @@ public class TaskDTO {
     private String title;
     private String subTitle;
     private String content;
-    private String status;
+    @NotNull(message = "statusId should be passed", groups = CreationValidator.class)
+    @Positive(message = "statusId should be positive", groups = CreationValidator.class)
+    private Integer statusId;
     private Timestamp dueDateTime;
     private Timestamp creationDateTime;
     @NotNull(message = "Creator should be passed", groups = CreationValidator.class)

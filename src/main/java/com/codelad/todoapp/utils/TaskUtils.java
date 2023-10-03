@@ -18,7 +18,7 @@ public class TaskUtils {
         taskDto.setTitle(taskEntity.getTitle());
         taskDto.setSubTitle(taskEntity.getSubTitle());
         taskDto.setContent(taskEntity.getContent());
-        taskDto.setStatus(taskEntity.getStatus());
+        taskDto.setStatusId(taskEntity.getStatusId());
         taskDto.setDueDateTime(taskEntity.getDueDateTime());
         taskDto.setCreationDateTime(taskEntity.getCreationDateTime());
         taskDto.setCreator(taskEntity.getCreator());
@@ -33,7 +33,7 @@ public class TaskUtils {
         taskEntity.setTitle(taskDto.getTitle());
         taskEntity.setSubTitle(taskDto.getSubTitle());
         taskEntity.setContent(taskDto.getContent());
-        taskEntity.setStatus(taskDto.getStatus());
+        taskEntity.setStatusId(taskDto.getStatusId());
         taskEntity.setDueDateTime(taskDto.getDueDateTime());
         taskEntity.setCreationDateTime(taskDto.getCreationDateTime());
         taskEntity.setCreator(taskDto.getCreator());

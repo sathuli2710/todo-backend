@@ -16,7 +16,7 @@ public class TaskEntity {
     @Column(name = "sub_title")
     private String subTitle;
     private String content;
-    private String status;
+    private Integer statusId;
     @Column(name = "due_date_time")
     private Timestamp dueDateTime;
     @Column(name = "creation_date_time", updatable = false)

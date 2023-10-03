@@ -1,10 +1,9 @@
 package com.codelad.todoapp.controllers;
 
-import com.codelad.todoapp.dtos.CreationValidator;
-import com.codelad.todoapp.dtos.GenericResponseDTO;
-import com.codelad.todoapp.dtos.TaskDTO;
-import com.codelad.todoapp.dtos.UpdationValidator;
+import com.codelad.todoapp.dtos.*;
+import com.codelad.todoapp.services.StatusService;
 import com.codelad.todoapp.services.TaskService;
+import com.codelad.todoapp.utils.StringToIntegerConvertor;
 import com.codelad.todoapp.utils.StringToTimestampConvertor;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,9 @@ public class TaskController {
 
     @Autowired
     TaskService taskService;
+
+    @Autowired
+    StatusService statusService;
 
     public record TaskResponse(int numFound, List<TaskDTO> data){}
     @GetMapping("/")
@@ -54,16 +56,24 @@ public class TaskController {
     @InitBinder
     public void initBinder(WebDataBinder binder){
         binder.registerCustomEditor(Timestamp.class, new StringToTimestampConvertor());
+        binder.registerCustomEditor(Integer.class, new StringToIntegerConvertor());
     }
 
     @PostMapping("/")
     public ResponseEntity<GenericResponseDTO<?>> createTask(@Validated(CreationValidator.class) @ModelAttribute TaskDTO taskDto, BindingResult bindingResult){
+        if(taskDto.getStatusId() != null) {
+            taskDto.setStatusId(1);
+        }
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), bindingResult.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
         }
         try{
-            taskService.createTask(taskDto);
-            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.CREATED.value(), "SUCCESS", "Successfully Created the Task", null), HttpStatus.CREATED);
+            StatusDTO statusDTO = statusService.getStatusById(taskDto.getStatusId().toString());
+            if(Objects.nonNull(statusDTO)){
+                taskService.createTask(taskDto);
+                return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.CREATED.value(), "SUCCESS", "Successfully Created the Task", null), HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Please use proper statusId"), HttpStatus.BAD_REQUEST);
         }catch(Exception ignored) {
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Cannot create the task"), HttpStatus.BAD_REQUEST);
         }
@@ -77,8 +87,14 @@ public class TaskController {
         try{
             TaskDTO existingTaskDto = taskService.getTaskById(taskId);
             if(Objects.nonNull(existingTaskDto)) {
-                taskService.updateTask(existingTaskDto, updateTaskDto);
-                return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", "Successfully Updated the Task", null), HttpStatus.OK);
+                if(updateTaskDto.getStatusId() != null){
+                    StatusDTO statusDTO = statusService.getStatusById(updateTaskDto.getStatusId().toString());
+                    if(Objects.nonNull(statusDTO)){
+                        taskService.updateTask(existingTaskDto, updateTaskDto);
+                        return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", "Successfully Updated the Task", null), HttpStatus.OK);
+                    }
+                    return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Please use proper statusId"), HttpStatus.BAD_REQUEST);
+                }
             }
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.NOT_FOUND.value(), "ERROR", "No Such Task", null), HttpStatus.NOT_FOUND);
         }catch (Exception e){
