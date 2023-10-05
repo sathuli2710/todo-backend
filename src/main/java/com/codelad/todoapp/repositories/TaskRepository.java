@@ -1,4 +1,4 @@
-package com.codelad.todoapp.Repositories;
+package com.codelad.todoapp.repositories;
 
 import com.codelad.todoapp.models.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

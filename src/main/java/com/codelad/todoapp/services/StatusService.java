@@ -1,6 +1,6 @@
 package com.codelad.todoapp.services;
 
-import com.codelad.todoapp.Repositories.StatusRepository;
+import com.codelad.todoapp.repositories.StatusRepository;
 import com.codelad.todoapp.dtos.StatusDTO;
 import com.codelad.todoapp.models.StatusEntity;
 import com.codelad.todoapp.utils.StatusUtils;

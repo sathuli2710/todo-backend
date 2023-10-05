@@ -1,6 +1,6 @@
 package com.codelad.todoapp.services;
 
-import com.codelad.todoapp.Repositories.TaskRepository;
+import com.codelad.todoapp.repositories.TaskRepository;
 import com.codelad.todoapp.dtos.TaskDTO;
 import com.codelad.todoapp.models.TaskEntity;
 import com.codelad.todoapp.utils.TaskUtils;
