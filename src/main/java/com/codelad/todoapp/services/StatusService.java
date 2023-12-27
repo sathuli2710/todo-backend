@@ -70,4 +70,10 @@ public class StatusService {
             statusRepository.deleteById(Integer.parseInt(statusId));
         }catch (Exception ignored){}
     }
+
+    public void deleteAllStatus(){
+        try{
+            statusRepository.deleteAll();
+        }catch (Exception ignored) {}
+    }
 }

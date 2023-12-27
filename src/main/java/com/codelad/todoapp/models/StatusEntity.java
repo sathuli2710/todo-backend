@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "status_info")
+@Table(name = "status")
 @Data
 public class StatusEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "status_label")
     private String statusLabel;

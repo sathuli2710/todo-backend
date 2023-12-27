@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "tasks")
@@ -17,6 +18,8 @@ public class TaskEntity {
     private String subTitle;
     private String content;
     private Integer statusId;
+    @Column(name = "tag_ids")
+    private List<Long> tagIds;
     @Column(name = "due_date_time")
     private Timestamp dueDateTime;
     @Column(name = "creation_date_time", updatable = false)

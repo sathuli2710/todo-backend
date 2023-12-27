@@ -63,12 +63,12 @@ public class TagController {
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), bindingResult.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
         }
         try{
-//            List<TagDTO> allTags = tagService.getAllTags();
-//            for(TagDTO existingTagDTO : allTags){
-//                if(existingTagDTO.getId().toString().equalsIgnoreCase(tagDTO.getId().toString())){
-//                    return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Id cannot be duplicate"), HttpStatus.BAD_REQUEST);
-//                }
-//            }
+            List<TagDTO> allTags = tagService.getAllTags();
+            for(TagDTO existingTagDTO : allTags){
+                if(existingTagDTO.getTagLabel().equalsIgnoreCase(tagDTO.getTagLabel())){
+                    return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "tagLabel cannot be duplicate"), HttpStatus.BAD_REQUEST);
+                }
+            }
             tagService.createTag(tagDTO);
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.CREATED.value(), "SUCCESS", "Successfully created the tag", null), HttpStatus.CREATED);
         }

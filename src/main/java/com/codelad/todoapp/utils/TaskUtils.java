@@ -2,13 +2,7 @@ package com.codelad.todoapp.utils;
 
 import com.codelad.todoapp.dtos.TaskDTO;
 import com.codelad.todoapp.models.TaskEntity;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Component
 public class TaskUtils {
@@ -19,6 +13,7 @@ public class TaskUtils {
         taskDto.setSubTitle(taskEntity.getSubTitle());
         taskDto.setContent(taskEntity.getContent());
         taskDto.setStatusId(taskEntity.getStatusId());
+        taskDto.setTagIds(taskEntity.getTagIds());
         taskDto.setDueDateTime(taskEntity.getDueDateTime());
         taskDto.setCreationDateTime(taskEntity.getCreationDateTime());
         taskDto.setCreator(taskEntity.getCreator());
@@ -34,6 +29,7 @@ public class TaskUtils {
         taskEntity.setSubTitle(taskDto.getSubTitle());
         taskEntity.setContent(taskDto.getContent());
         taskEntity.setStatusId(taskDto.getStatusId());
+        taskEntity.setTagIds(taskDto.getTagIds());
         taskEntity.setDueDateTime(taskDto.getDueDateTime());
         taskEntity.setCreationDateTime(taskDto.getCreationDateTime());
         taskEntity.setCreator(taskDto.getCreator());
@@ -41,5 +37,4 @@ public class TaskUtils {
         taskEntity.setUpdater(taskDto.getUpdater());
         return taskEntity;
     }
-
 }

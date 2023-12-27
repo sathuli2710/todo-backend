@@ -4,12 +4,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@AtLeastOneField(groups = UpdationValidator.class)
 public class TaskDTO {
     private Long id;
     @NotNull(message = "Title should be passed", groups = CreationValidator.class)
@@ -17,9 +21,9 @@ public class TaskDTO {
     private String title;
     private String subTitle;
     private String content;
-    @NotNull(message = "statusId should be passed", groups = CreationValidator.class)
     @Positive(message = "statusId should be positive", groups = CreationValidator.class)
     private Integer statusId;
+    private List<Long> tagIds;
     private Timestamp dueDateTime;
     private Timestamp creationDateTime;
     @NotNull(message = "Creator should be passed", groups = CreationValidator.class)

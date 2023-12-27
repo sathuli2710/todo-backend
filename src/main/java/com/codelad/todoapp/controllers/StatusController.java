@@ -68,8 +68,8 @@ public class StatusController {
         try{
             List<StatusDTO> allStatus = statusService.getAllStatus();
             for(StatusDTO existingStatusDTO : allStatus){
-                if(existingStatusDTO.getId().toString().equalsIgnoreCase(statusDTO.getId().toString())){
-                    return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Id cannot be duplicate"), HttpStatus.BAD_REQUEST);
+                if(existingStatusDTO.getShortCode().toString().equalsIgnoreCase(statusDTO.getShortCode().toString())){
+                    return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "shortCode cannot be duplicate"), HttpStatus.BAD_REQUEST);
                 }
             }
             statusService.createStatus(statusDTO);
@@ -111,6 +111,16 @@ public class StatusController {
             }
         }catch (Exception e){
             return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Could not delete status"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/")
+    public ResponseEntity<GenericResponseDTO<?>> deleteAllStatus(){
+        try{
+            statusService.deleteAllStatus();
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.OK.value(), "SUCCESS", "Successfully deleted all the status", null), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new GenericResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "ERROR", new ArrayList<>(), "Could not delete all status"), HttpStatus.BAD_REQUEST);
         }
     }
 }
