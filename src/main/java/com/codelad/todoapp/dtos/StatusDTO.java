@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@AtLeastOneField(groups = UpdationValidator.class, message = "At Lease one field should be passed to update the status")
 public class StatusDTO {
     private Integer id;
     @NotNull(message = "status label should be passed", groups = CreationValidator.class)

@@ -13,6 +13,14 @@ public class AtLeastOneFieldValidator implements ConstraintValidator<AtLeastOneF
             TaskDTO taskDTO = (TaskDTO) value;
             return taskDTO.getTitle() != null || taskDTO.getSubTitle() != null || taskDTO.getContent() != null || taskDTO.getStatusId() != null || taskDTO.getDueDateTime() != null || taskDTO.getTagIds() != null;
         }
+        if(value instanceof StatusDTO) {
+            StatusDTO statusDTO = (StatusDTO) value;
+            return statusDTO.getStatusLabel() != null || statusDTO.getShortCode() != null || statusDTO.getColor() != null;
+        }
+        if(value instanceof TagDTO){
+            TagDTO tagDTO = (TagDTO) value;
+            return tagDTO.getTagLabel() != null || tagDTO.getColor() != null;
+        }
         return true;
     }
 }
